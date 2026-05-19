@@ -66,27 +66,42 @@ Key path: `~/.ssh/KEY` on Linux/macOS; `C:\Users\NAME\.ssh\KEY` on Windows (Git 
 
 List available keys: `ls ~/.ssh/`
 
-## Report Format
+## Report Format — Short-then-Full
+
+**Always output in two stages:**
+
+### Stage 1 — One-line summary per server
+```
+<DATE> | <N> servers | 0 successful intrusions
+
+<SERVER_A>   ↑Xd   [⚠️reboot pending /  ✅clean]   disk XX%   bans/24h: N   [✅/⚠️]services
+<SERVER_B>   ↑Xd   ...
+```
+
+### Stage 2 — Full detail for each server with alerts
+Only expand full table if alerts exist; otherwise note "all clear" and skip.
 
 ```
 ## Security Audit — <SERVER> (<DATE>)
 
-| Item           | Status                              |
-|----------------|-------------------------------------|
-| Uptime         | X days                              |
-| Reboot pending | ✅ No / ⚠️ Yes (kernel update)       |
-| Kernel         | X.X.X-XX-generic                   |
-| Disk /         | XX% used (XG / XG)                  |
-| Memory         | XXX used / XG total                 |
+| Item           | Status                                  |
+|----------------|-----------------------------------------|
+| Uptime         | X days                                  |
+| Reboot pending | ✅ No / ⚠️ Yes — kernel update           |
+| Kernel         | X.X.X-XX-generic                        |
+| Disk /         | XX% (XG / XG)                           |
+| Memory         | XXX / XG — ⚠️ no swap (if applicable)   |
 
-fail2ban (total bans / currently banned):
+fail2ban (total / currently banned):
 - sshd:               X total / X active
 - sshd-preauth-reset: X total / X active
 - recidive:           X total / X active
+- bans past 24h:      N
 
 Services: docker ✅  fail2ban ✅  ufw ✅
+Containers: [name] ✅ Up X days / ⚠️ not running
 
-⚠️ Alerts: [disk >80%, service down, suspicious IPs, etc.]
+⚠️ Action items: [reboot, disk cleanup, swap, open ports, etc.]
 ```
 
 ## Multi-Server Parallel Check
